@@ -1,7 +1,9 @@
 package task;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Location {
 
 	private Position geo_position;
@@ -57,10 +59,9 @@ public class Location {
 
 	@Override
 	public String toString() {
-		// return "{id:" + _id + ", _type:" + _type + ", name:" + name +
-		// ", type:"
-		// + type + "," + " geo_position:" + geo_position.toString() + "}";
-		return "{}";
+		 return "{id:" + _id + ", _type:" + _type + ", name:" + name +
+		 ", type:"
+		 + type + "," + " geo_position:" + geo_position.toString() + "}";
 	}
 
 }

@@ -1,9 +1,7 @@
 package task;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Position {
 	private float latitude;
 	private float longitude;

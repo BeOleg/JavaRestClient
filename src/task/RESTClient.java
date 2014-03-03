@@ -78,12 +78,15 @@ public class RESTClient {
 	}
 
 	public static void main(String[] args) {
-		RESTClient rc = new RESTClient("suggest/position/en/name/dev");
+		RESTClient rc = new RESTClient("suggest/position/en/name/acav");
 		rc.getRquest();
 		rc.closeConnection();
 		JSONParser jp = new JSONParser(rc);
 		jp.fromNative();
+		ResultSet obj = jp.getObject();
 		System.out.println(jp.getObject());
+		System.out.println(obj.getResults().size());
+		// System.out.println(rc.getLastResponse());
 
 	}
 }
