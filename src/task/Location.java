@@ -57,11 +57,16 @@ public class Location {
 		this.type = type;
 	}
 
+	public String[] toRow() {
+		return new String[] { _type, String.valueOf(_id), name, type,
+				String.valueOf(geo_position.getLatitude()),
+				String.valueOf(geo_position.getLongitude()) };
+	}
+
 	@Override
 	public String toString() {
-		 return "{id:" + _id + ", _type:" + _type + ", name:" + name +
-		 ", type:"
-		 + type + "," + " geo_position:" + geo_position.toString() + "}";
+		return "{id:" + _id + ", _type:" + _type + ", name:" + name + ", type:"
+				+ type + "," + " geo_position:" + geo_position.toString() + "}";
 	}
 
 }

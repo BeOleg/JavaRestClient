@@ -17,11 +17,13 @@ public class RESTClient {
 	 **/
 	@SuppressWarnings("deprecation")
 	private String _resource;
+	private String _search;
 	private DefaultHttpClient _client;
 	private String _lastResponse;
 
-	public RESTClient(String resource) {
+	public RESTClient(String resource, String search) {
 		_resource = resource;
+		_search = search;
 		_client = new DefaultHttpClient();
 		_lastResponse = null;
 	}
@@ -30,7 +32,8 @@ public class RESTClient {
 		InputStream is = null;
 		String ln, output = "";
 		try {
-			HttpGet getRequest = new HttpGet(task.Settings.API_ROOT + _resource);
+			HttpGet getRequest = new HttpGet(task.Settings.API_ROOT + _resource
+					+ _search);
 			getRequest.addHeader("accept", "application/json");
 
 			HttpResponse response = _client.execute(getRequest);
@@ -46,7 +49,7 @@ public class RESTClient {
 			while ((ln = br.readLine()) != null) {
 				output += ln;
 			}
-
+			closeConnection();
 		} catch (ClientProtocolException e) {
 			if (task.Settings.DEBUG_MODE) {
 				e.printStackTrace();
@@ -69,7 +72,7 @@ public class RESTClient {
 		return _lastResponse;
 	}
 
-	public void closeConnection() {
+	private void closeConnection() {
 		/*
 		 * Giving the responsibility of closing the connection is BAD, normally
 		 * I would implement a connection pool...
@@ -77,16 +80,4 @@ public class RESTClient {
 		_client.getConnectionManager().shutdown();
 	}
 
-	public static void main(String[] args) {
-		RESTClient rc = new RESTClient("suggest/position/en/name/acav");
-		rc.getRquest();
-		rc.closeConnection();
-		JSONParser jp = new JSONParser(rc);
-		jp.fromNative();
-		ResultSet obj = jp.getObject();
-		System.out.println(jp.getObject());
-		System.out.println(obj.getResults().size());
-		// System.out.println(rc.getLastResponse());
-
-	}
 }
