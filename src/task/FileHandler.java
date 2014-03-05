@@ -19,8 +19,9 @@ public class FileHandler {
 	}
 
 	public String output() {
+		FileWriter writer = null;
 		try {
-			FileWriter writer = new FileWriter(_fileName);
+			writer = new FileWriter(_fileName);
 			outputRow(writer, task.Settings.FILE_HEADERS);
 			for (Location loc : _jp.fromNative().getResults()) {
 				outputRow(writer, loc.toRow());
@@ -33,6 +34,16 @@ public class FileHandler {
 				e.printStackTrace();
 			} else {
 				// notify debug service, pass
+			}
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception e) {
+				if (task.Settings.DEBUG_MODE) {
+					e.printStackTrace();
+				} else {
+					// notify debug service, pass
+				}
 			}
 		}
 
