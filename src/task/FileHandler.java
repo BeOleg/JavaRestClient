@@ -4,13 +4,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
 
-public class FileHnadler {
+public class FileHandler {
 	JSONParser _jp;
 	String _dir;
 	String _csv;
 	String _fileName;
 
-	public FileHnadler(JSONParser jp, String dir) {
+	public FileHandler(JSONParser jp, String dir) {
 		_jp = jp;
 		_dir = dir;
 		java.util.Date date = new java.util.Date();
@@ -19,10 +19,11 @@ public class FileHnadler {
 	}
 
 	public String output() {
+		FileWriter writer = null;
 		try {
-			FileWriter writer = new FileWriter(_fileName);
+			writer = new FileWriter(_fileName);
 			outputRow(writer, task.Settings.FILE_HEADERS);
-			for (Location loc : _jp.getObject().getResults()) {
+			for (Location loc : _jp.fromNative().getResults()) {
 				outputRow(writer, loc.toRow());
 			}
 			writer.flush();
@@ -33,6 +34,16 @@ public class FileHnadler {
 				e.printStackTrace();
 			} else {
 				// notify debug service, pass
+			}
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception e) {
+				if (task.Settings.DEBUG_MODE) {
+					e.printStackTrace();
+				} else {
+					// notify debug service, pass
+				}
 			}
 		}
 

@@ -25,10 +25,9 @@ public class RESTClient {
 		_resource = resource;
 		_search = search;
 		_client = new DefaultHttpClient();
-		_lastResponse = null;
 	}
 
-	public void getRquest() {
+	public String getRequest() {
 		InputStream is = null;
 		String ln, output = "";
 		try {
@@ -49,7 +48,6 @@ public class RESTClient {
 			while ((ln = br.readLine()) != null) {
 				output += ln;
 			}
-			closeConnection();
 		} catch (ClientProtocolException e) {
 			if (task.Settings.DEBUG_MODE) {
 				e.printStackTrace();
@@ -64,20 +62,10 @@ public class RESTClient {
 				// notify debug service, pass
 			}
 
+		} finally {
+			_client.getConnectionManager().shutdown();
 		}
-		_lastResponse = output;
-	}
-
-	public String getLastResponse() {
-		return _lastResponse;
-	}
-
-	private void closeConnection() {
-		/*
-		 * Giving the responsibility of closing the connection is BAD, normally
-		 * I would implement a connection pool...
-		 */
-		_client.getConnectionManager().shutdown();
+		return output;
 	}
 
 }

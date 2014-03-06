@@ -11,14 +11,15 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class JSONParser {
-	private ResultSet _results;
+
 	private String _native;
 
 	public JSONParser(RESTClient rc) {
-		_native = rc.getLastResponse();
+		_native = rc.getRequest();
 	}
 
-	public void fromNative() {
+	public ResultSet fromNative() {
+		ResultSet results = null;
 		ObjectMapper mapper = new ObjectMapper().setVisibility(
 				JsonMethod.FIELD, Visibility.ANY);
 		mapper.configure(
@@ -27,7 +28,7 @@ public class JSONParser {
 		try {
 
 			// read from file, convert it to user class
-			_results = mapper.readValue(_native, ResultSet.class);
+			results = mapper.readValue(_native, ResultSet.class);
 
 		} catch (JsonGenerationException e) {
 			if (task.Settings.DEBUG_MODE) {
@@ -55,14 +56,11 @@ public class JSONParser {
 			}
 		}
 
+		return results;
 	}
 
 	public String toNative() {
-		// TODO - implememnt try -> catch
-		return _results.toString();
+		return _native;
 	}
 
-	public ResultSet getObject() {
-		return _results;
-	}
 }
